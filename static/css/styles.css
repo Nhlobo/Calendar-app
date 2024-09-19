@@ -22,12 +22,16 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    width: 100%;
+    background-color: #007bff;
+    color: #fff;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 header h1 {
     font-size: 2.5rem;
-    color: #333;
+    margin: 0;
 }
 
 nav ul {
@@ -39,8 +43,8 @@ nav ul {
 }
 
 nav a.btn {
-    background-color: #007bff;
-    color: #fff;
+    background-color: #fff;
+    color: #007bff;
     border: none;
     padding: 10px 20px;
     cursor: pointer;
@@ -48,10 +52,11 @@ nav a.btn {
     text-decoration: none;
     display: inline-block;
     text-align: center;
+    font-weight: bold;
 }
 
 nav a.btn:hover {
-    background-color: #0056b3;
+    background-color: #e9f5fc;
 }
 
 /* Calendar */
@@ -59,18 +64,27 @@ nav a.btn:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
 }
 
 #calendar-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
+    max-width: 800px;
     margin-bottom: 20px;
+}
+
+#calendar-month {
+    font-size: 1.5rem;
 }
 
 /* Event Form */
 #calendar-events {
     margin-top: 20px;
+    width: 100%;
+    max-width: 800px;
 }
 
 #event-form {
@@ -139,6 +153,7 @@ form button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-weight: bold;
 }
 
 form button:hover {
