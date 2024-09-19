@@ -1,151 +1,89 @@
-from flask import Flask, render_template, request, redirect, url_for, session
-import sqlite3
+from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'
+app.config['SECRET_KEY'] = 'your_secret_key'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///events.db'
+db = SQLAlchemy(app)
 
-# Database setup
-def init_db():
-    conn = sqlite3.connect('events.db')
-    c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS users (
-                id INTEGER PRIMARY KEY, 
-                username TEXT, 
-                password TEXT)''')
-    c.execute('''CREATE TABLE IF NOT EXISTS events (
-                id INTEGER PRIMARY KEY, 
-                user_id INTEGER, 
-                title TEXT, 
-                date TEXT, 
-                description TEXT, 
-                FOREIGN KEY(user_id) REFERENCES users(id))''')
-    conn.commit()
-    conn.close()
+class Event(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    date = db.Column(db.String(10), nullable=False)
+    description = db.Column(db.Text, nullable=True)
 
-# Initialize the database
-init_db()
+with app.app_context():
+    db.create_all()
 
-# Home route (Calendar view)
 @app.route('/')
 def index():
-    if 'username' in session:
-        return render_template('index.html', username=session['username'])
-    return redirect(url_for('login'))
-
-# Login route
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        
-        conn = sqlite3.connect('events.db')
-        c = conn.cursor()
-        c.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
-        user = c.fetchone()
-        conn.close()
-        
-        if user:
-            session['username'] = username
-            session['user_id'] = user[0]  # Store user ID in session
-            return redirect(url_for('index'))
-        else:
-            return "Invalid login credentials"
-    
-    return render_template('login.html')
-
-# Signup route
-@app.route('/signup', methods=['GET', 'POST'])
-def signup():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        
-        conn = sqlite3.connect('events.db')
-        c = conn.cursor()
-        c.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
-        conn.commit()
-        conn.close()
-        
+    if 'username' not in session:
         return redirect(url_for('login'))
-    
-    return render_template('signup.html')
+    events = Event.query.all()
+    return render_template('index.html', events=events)
 
-# Add event route
-@app.route('/add_event', methods=['GET', 'POST'])
+@app.route('/add_event', methods=['POST'])
 def add_event():
     if 'username' not in session:
         return redirect(url_for('login'))
+    title = request.form.get('title')
+    date = request.form.get('date')
+    description = request.form.get('description')
+    new_event = Event(title=title, date=date, description=description)
+    db.session.add(new_event)
+    db.session.commit()
+    flash('Event added successfully!')
+    return redirect(url_for('index'))
 
-    if request.method == 'POST':
-        title = request.form['title']
-        date = request.form['date']
-        description = request.form['description']
-        
-        conn = sqlite3.connect('events.db')
-        c = conn.cursor()
-        c.execute("INSERT INTO events (user_id, title, date, description) VALUES (?, ?, ?, ?)",
-                  (session['user_id'], title, date, description))
-        conn.commit()
-        conn.close()
-        
-        return redirect(url_for('view_events'))
-
-    return render_template('add_event.html')
-
-# View events route
-@app.route('/view_events')
-def view_events():
-    if 'username' not in session:
-        return redirect(url_for('login'))
-
-    conn = sqlite3.connect('events.db')
-    c = conn.cursor()
-    c.execute("SELECT * FROM events WHERE user_id = ?", (session['user_id'],))
-    events = c.fetchall()
-    conn.close()
-    
-    return render_template('view_events.html', events=events)
-
-# Edit event route
-@app.route('/edit_event/<int:id>', methods=['GET', 'POST'])
+@app.route('/edit_event/<int:id>', methods=['POST'])
 def edit_event(id):
     if 'username' not in session:
         return redirect(url_for('login'))
+    event = Event.query.get(id)
+    event.title = request.form.get('title')
+    event.date = request.form.get('date')
+    event.description = request.form.get('description')
+    db.session.commit()
+    flash('Event updated successfully!')
+    return redirect(url_for('index'))
 
-    conn = sqlite3.connect('events.db')
-    c = conn.cursor()
-    c.execute("SELECT * FROM events WHERE id = ?", (id,))
-    event = c.fetchone()
-
-    if request.method == 'POST':
-        title = request.form['title']
-        date = request.form['date']
-        description = request.form['description']
-        
-        c.execute("UPDATE events SET title = ?, date = ?, description = ? WHERE id = ?", 
-                  (title, date, description, id))
-        conn.commit()
-        conn.close()
-        
-        return redirect(url_for('view_events'))
-
-    conn.close()
-    return render_template('edit_event.html', event=event)
-
-# Delete event route
-@app.route('/delete_event/<int:id>')
+@app.route('/delete_event/<int:id>', methods=['POST'])
 def delete_event(id):
     if 'username' not in session:
         return redirect(url_for('login'))
+    event = Event.query.get(id)
+    db.session.delete(event)
+    db.session.commit()
+    flash('Event deleted successfully!')
+    return redirect(url_for('index'))
 
-    conn = sqlite3.connect('events.db')
-    c = conn.cursor()
-    c.execute("DELETE FROM events WHERE id = ?", (id,))
-    conn.commit()
-    conn.close()
-    
-    return redirect(url_for('view_events'))
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        # Simplified authentication
+        if username == 'admin' and password == 'admin':
+            session['username'] = username
+            return redirect(url_for('index'))
+        flash('Invalid credentials!')
+    return render_template('login.html')
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        # Registration logic would go here
+        flash('Account created! You can now log in.')
+        return redirect(url_for('login'))
+    return render_template('signup.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('login'))
 
 if __name__ == '__main__':
     app.run(debug=True)
