@@ -8,23 +8,33 @@
 </head>
 <body>
     <header>
-        <h1>Calendar App</h1>
+        <h1>Calendar Application</h1>
         <nav>
             <ul>
-                <li><a href="{{ url_for('index') }}" class="btn">Home</a></li>
-                <li><a href="{{ url_for('add_event') }}" class="btn">Add Event</a></li>
-                <li><a href="{{ url_for('view_events') }}" class="btn">View Events</a></li>
-                <li><a href="{{ url_for('logout') }}" class="btn">Logout</a></li>
+                <li><a href="/" class="btn">Home</a></li>
+                <li><a href="/add_event" class="btn">Add Event</a></li>
+                <li><a href="/view_events" class="btn">View Events</a></li>
+                <li><a href="/logout" class="btn">Logout</a></li>
             </ul>
         </nav>
     </header>
     <main>
         <h2>Welcome, {{ username }}!</h2>
-        <p>Here you can manage your events with ease. Use the navigation buttons above to access different sections of the app.</p>
-        <!-- Calendar can be embedded or included here if needed -->
+        <p>Manage your schedule and stay organized with our calendar application.</p>
+        <div class="calendar">
+            <div id="calendar-header">
+                <!-- Add calendar header content here, e.g., month/year navigation -->
+            </div>
+            <div id="calendar-days">
+                <!-- Add calendar days content here -->
+            </div>
+            <div id="calendar-events">
+                <!-- Add event forms or event listings here -->
+            </div>
+        </div>
     </main>
     <footer>
-        <p>&copy; 2024 Nhlovo Mathebula Calendar App. All rights reserved.</p>
+        <p>&copy; 2024 Calendar App. All rights reserved.</p>
     </footer>
 </body>
-    </html>
+        </html>
