@@ -4,31 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendar App</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
-        <div class="container">
-            <h1>Calendar App</h1>
-            <nav>
-                <ul>
-                    <li><a class="btn" href="{{ url_for('index') }}">Home</a></li>
-                    <li><a class="btn" href="{{ url_for('view_events') }}">View Events</a></li>
-                    <li><a class="btn" href="{{ url_for('add_event') }}">Add Event</a></li>
-                    {% if 'username' in session %}
-                        <li><a class="btn" href="{{ url_for('logout') }}">Logout</a></li>
-                    {% else %}
-                        <li><a class="btn" href="{{ url_for('login') }}">Login</a></li>
-                        <li><a class="btn" href="{{ url_for('signup') }}">Signup</a></li>
-                    {% endif %}
-                </ul>
-            </nav>
-        </div>
+        <h1>Calendar App</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}" class="btn">Home</a></li>
+                <li><a href="{{ url_for('add_event') }}" class="btn">Add Event</a></li>
+                <li><a href="{{ url_for('view_events') }}" class="btn">View Events</a></li>
+                <li><a href="{{ url_for('logout') }}" class="btn">Logout</a></li>
+            </ul>
+        </nav>
     </header>
-    <main class="container">
-        <h2>Hello, {{ username }}!</h2>
-        <p>Welcome back to your calendar app. You can manage your events using the links above.</p>
-        <p>Use the navigation menu to explore the application. If you have any questions or need assistance, feel free to reach out.</p>
+    <main>
+        <div class="calendar">
+            <div id="calendar-header">
+                <button id="prev-month" class="btn">Previous</button>
+                <h2 id="calendar-month">Month Year</h2>
+                <button id="next-month" class="btn">Next</button>
+            </div>
+            <div id="calendar-days" class="calendar-days">
+                <!-- Calendar days will be dynamically generated here -->
+            </div>
+        </div>
+        <div id="calendar-events">
+            <h2>Your Events</h2>
+            <div id="events-list" class="events-list">
+                <!-- List of events will be dynamically generated here -->
+            </div>
+        </div>
     </main>
     <footer>
         <p>&copy; 2024 Calendar App. All rights reserved.</p>
