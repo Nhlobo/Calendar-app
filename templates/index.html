@@ -5,44 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendar</title>
     <link rel="stylesheet" href="/static/css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="/static/js/calendar.js" defer></script>
 </head>
 <body>
-    <div class="header">
-        <div class="auth-buttons">
-            {% if session.get('username') %}
-                <a href="/logout" class="btn">Logout</a>
-            {% else %}
-                <a href="/login" class="btn">Login</a>
-                <a href="/signup" class="btn">Sign Up</a>
-            {% endif %}
-        </div>
-    </div>
-
     <div class="container calendar-container">
-        <div class="calendar-header">
-            <button id="prev-month"><i class="fas fa-chevron-left"></i></button>
-            <h2 id="month-year"></h2>
-            <button id="next-month"><i class="fas fa-chevron-right"></i></button>
-        </div>
-        <div class="calendar-body">
-            <div class="calendar-weekdays">
-                <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+        <header>
+            <h1>Welcome, {{ session['username'] }}!</h1>
+            <button id="toggle-theme">Toggle Dark/Light Mode</button>
+            <a href="/logout" class="btn">Logout</a>
+        </header>
+        <main>
+            <div class="calendar">
+                <div id="calendar-header">
+                    <button id="prev-month">&lt;</button>
+                    <h2 id="month-year"></h2>
+                    <button id="next-month">&gt;</button>
+                </div>
+                <div id="calendar-days"></div>
+                <div id="calendar-events">
+                    <h3>Events</h3>
+                    <form id="event-form" action="/add_event" method="POST">
+                        <input type="text" name="title" id="event-title" placeholder="Event Title" required>
+                        <input type="date" name="date" id="event-date" required>
+                        <textarea name="description" id="event-description" placeholder="Description"></textarea>
+                        <button type="submit">Add Event</button>
+                    </form>
+                    <ul id="events-list">
+                        {% for event in events %}
+                            <li>
+                                <strong>{{ event.title }} ({{ event.date }})</strong>
+                                <p>{{ event.description }}</p>
+                                <form action="/edit_event/{{ event.id }}" method="POST">
+                                    <input type="text" name="title" value="{{ event.title }}" required>
+                                    <input type="date" name="date" value="{{ event.date }}" required>
+                                    <textarea name="description">{{ event.description }}</textarea>
+                                    <button type="submit">Edit</button>
+                                </form>
+                                <form action="/delete_event/{{ event.id }}" method="POST">
+                                    <button type="submit">Delete</button>
+                                </form>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
-            <div id="calendar-days" class="calendar-days"></div>
-        </div>
-        <div class="controls">
-            <button id="toggle-mode"><i class="fas fa-adjust"></i> Toggle Dark/Light Mode</button>
-        </div>
+        </main>
     </div>
-
-    <footer>
-        <p>&copy; Nhlovo Mathebula. All rights reserved.</p>
-        <div class="footer-icons">
-            <a href="mailto:nhlobo365@gmail.com"><i class="fas fa-envelope"></i></a>
-            <a href="https://github.com/Nhlobo" target="_blank"><i class="fab fa-github"></i></a>
-        </div>
-    </footer>
-    <script src="/static/js/script.js"></script>
 </body>
-                </html>
+                            </html>
