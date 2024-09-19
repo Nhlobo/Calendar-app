@@ -3,50 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Events</title>
-    <link rel="stylesheet" href="/static/css/styles.css">
+    <title>Calendar App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Welcome, {{ session['username'] }}!</h1>
-            <a href="/logout" class="btn">Logout</a>
-        </header>
-
-        <main>
-            <section id="manage-events">
-                <h2>Your Events</h2>
-                <form id="event-form" action="/add_event" method="POST">
-                    <input type="text" name="title" id="event-title" placeholder="Event Title" required>
-                    <input type="date" name="date" id="event-date" required>
-                    <textarea name="description" id="event-description" placeholder="Description"></textarea>
-                    <button type="submit">Add Event</button>
-                </form>
-
-                <a href="/view_events" class="btn">View All Events</a>
-
-                <div id="events-list">
-                    {% if events %}
-                        <ul>
-                            {% for event in events %}
-                                <li>
-                                    <strong>{{ event.title }} ({{ event.date }})</strong>
-                                    <p>{{ event.description }}</p>
-                                    <div class="event-actions">
-                                        <a href="/edit_event/{{ event.id }}" class="btn">Edit</a>
-                                        <form action="/delete_event/{{ event.id }}" method="POST" style="display:inline;">
-                                            <button type="submit" class="btn">Delete</button>
-                                        </form>
-                                    </div>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% else %}
-                        <p>No events added yet.</p>
-                    {% endif %}
-                </div>
-            </section>
-        </main>
-    </div>
+    <header>
+        <h1>Welcome to the Calendar App</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('view_events') }}">View Events</a></li>
+                <li><a href="{{ url_for('add_event') }}">Add Event</a></li>
+                {% if 'username' in session %}
+                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                    <li><a href="{{ url_for('signup') }}">Signup</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h2>Hello, {{ username }}!</h2>
+        <p>Welcome back to your calendar app. You can manage your events using the links above.</p>
+        <p>Here, you can view, add, or edit your events. Use the navigation menu to explore the application.</p>
+    </main>
+    <footer>
+        <p>&copy; 2024 Calendar App. All rights reserved.</p>
+    </footer>
 </body>
-    </html>
+        </html>
