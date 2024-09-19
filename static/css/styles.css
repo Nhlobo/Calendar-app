@@ -23,8 +23,11 @@ body {
     background-color: #333;
     display: flex;
     justify-content: flex-end;
+    align-items: center;
+    position: relative;
 }
 
+/* Auth Buttons */
 .auth-buttons {
     display: flex;
     gap: 10px;
@@ -46,7 +49,7 @@ body {
 
 /* Calendar Styles */
 .calendar-container {
-    max-width: 600px;
+    max-width: 90%;
     margin: 20px auto;
     background-color: inherit;
     border-radius: 8px;
@@ -163,17 +166,23 @@ footer {
     background-color: inherit;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 form {
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
 form input, form button {
+    width: 100%;
     padding: 10px;
     border-radius: 4px;
+    box-sizing: border-box;
 }
 
 form input {
@@ -196,7 +205,7 @@ form button:hover {
 /* Responsive Design */
 @media (max-width: 768px) {
     .calendar-container {
-        width: 90%;
+        width: 95%;
     }
 
     .calendar-header, .controls {
