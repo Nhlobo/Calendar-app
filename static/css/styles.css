@@ -37,6 +37,9 @@ button, a.btn {
     padding: 10px 20px;
     cursor: pointer;
     border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
 }
 
 button:hover, a.btn:hover {
@@ -44,7 +47,7 @@ button:hover, a.btn:hover {
 }
 
 /* Calendar */
-.calendar-container {
+.calendar {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -55,18 +58,6 @@ button:hover, a.btn:hover {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-    width: 100%;
-}
-
-#calendar-days {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 10px;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
 }
 
 /* Event Form */
@@ -78,36 +69,15 @@ button:hover, a.btn:hover {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
 }
 
-#event-form input,
-#event-form textarea {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1rem;
-}
-
-#event-form button {
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-#event-form button:hover {
-    background-color: #0056b3;
-}
-
-/* Events List */
 #events-list {
     margin-top: 20px;
+}
+
+#events-list ul {
+    padding: 0;
 }
 
 #events-list li {
@@ -118,43 +88,12 @@ button:hover, a.btn:hover {
     border-radius: 5px;
 }
 
-.event-item {
-    display: flex;
-    flex-direction: column;
-}
-
-.event-item strong {
-    font-size: 1.2rem;
-}
-
-.event-item p {
-    font-size: 0.9rem;
-    margin-top: 5px;
-}
-
-.btn-edit,
-.btn-delete {
-    padding: 8px 12px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    margin-right: 5px;
-    text-decoration: none;
-    font-size: 0.9rem;
+.event-actions {
     margin-top: 10px;
 }
 
-.btn-delete {
-    background-color: #f44336;
-}
-
-.btn-edit:hover {
-    background-color: #0056b3;
-}
-
-.btn-delete:hover {
-    background-color: #c0392b;
+.event-actions a, .event-actions button {
+    margin-right: 10px;
 }
 
 /* Login & Signup Pages */
@@ -200,7 +139,7 @@ form button:hover {
 
 /* Media Queries */
 @media (max-width: 768px) {
-    .calendar-container {
+    .calendar {
         width: 100%;
     }
 
