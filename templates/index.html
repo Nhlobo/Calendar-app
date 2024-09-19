@@ -3,58 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Calendar</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <title>Event Calendar</title>
     <link rel="stylesheet" href="/static/css/styles.css">
     <script src="/static/js/calendar.js" defer></script>
 </head>
 <body>
-    <div class="welcome-message">
-        <div class="animation-wrapper">
-            <h1 class="greeting">Welcome, <span>{{ session['username'] }}</span>!</h1>
-        </div>
-        <button id="toggle-theme">Toggle Dark/Light Mode</button>
-        <a href="/logout" class="btn-logout">Logout</a>
-    </div>
-    
     <div class="container">
-        <div class="calendar-container">
-            <div id="calendar-header">
-                <button id="prev-month">&lt;</button>
-                <h2 id="month-year"></h2>
-                <button id="next-month">&gt;</button>
+        <header>
+            <h1 class="welcome-message">Welcome, {{ username }}!</h1>
+            <a href="/logout" class="btn-logout">Logout</a>
+        </header>
+
+        <main>
+            <div class="main-content">
+                <!-- Calendar Section -->
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <button id="prev-month" class="nav-button">&lt;</button>
+                        <h2 id="month-year"></h2>
+                        <button id="next-month" class="nav-button">&gt;</button>
+                    </div>
+                    <div id="calendar-days" class="calendar-grid"></div>
+                </div>
+
+                <!-- Events Section -->
+                <div class="event-section">
+                    <h2>Manage Events</h2>
+                    <form id="event-form" action="/add_event" method="POST">
+                        <input type="text" name="title" id="event-title" placeholder="Event Title" required>
+                        <input type="date" name="date" id="event-date" required>
+                        <textarea name="description" id="event-description" placeholder="Description"></textarea>
+                        <button type="submit" class="btn-add-event">Add Event</button>
+                    </form>
+
+                    <!-- List of events -->
+                    <h3>Your Events</h3>
+                    <ul id="events-list">
+                        {% for event in events %}
+                            <li>
+                                <div class="event-item">
+                                    <strong>{{ event.title }} ({{ event.date }})</strong>
+                                    <p>{{ event.description }}</p>
+                                    <a href="/edit_event/{{ event.id }}" class="btn-edit">Edit</a>
+                                    <a href="/delete_event/{{ event.id }}" class="btn-delete">Delete</a>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
-            <div id="calendar-days"></div>
-        </div>
-        
-        <div class="event-section">
-            <h3>Add Event</h3>
-            <form id="event-form" action="/add_event" method="POST">
-                <input type="text" name="title" id="event-title" placeholder="Event Title" required>
-                <input type="date" name="date" id="event-date" required>
-                <textarea name="description" id="event-description" placeholder="Event Description"></textarea>
-                <button type="submit">Add Event</button>
-            </form>
-            
-            <h3>Your Events</h3>
-            <ul id="events-list">
-                {% for event in events %}
-                <li>
-                    <strong>{{ event.title }} ({{ event.date }})</strong>
-                    <p>{{ event.description }}</p>
-                    <form action="/edit_event/{{ event.id }}" method="POST">
-                        <input type="text" name="title" value="{{ event.title }}" required>
-                        <input type="date" name="date" value="{{ event.date }}" required>
-                        <textarea name="description">{{ event.description }}</textarea>
-                        <button type="submit">Edit</button>
-                    </form>
-                    <form action="/delete_event/{{ event.id }}" method="POST">
-                        <button type="submit">Delete</button>
-                    </form>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
+        </main>
     </div>
 </body>
-    </html>
+</html>
