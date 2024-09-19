@@ -23,29 +23,30 @@
                     <button type="submit">Add Event</button>
                 </form>
 
-                <ul id="events-list">
+                <a href="/view_events" class="btn">View All Events</a>
+
+                <div id="events-list">
                     {% if events %}
-                        {% for event in events %}
-                            <li>
-                                <strong>{{ event.title }} ({{ event.date }})</strong>
-                                <p>{{ event.description }}</p>
-                                <form action="/edit_event/{{ event.id }}" method="POST">
-                                    <input type="text" name="title" value="{{ event.title }}" required>
-                                    <input type="date" name="date" value="{{ event.date }}" required>
-                                    <textarea name="description">{{ event.description }}</textarea>
-                                    <button type="submit">Edit</button>
-                                </form>
-                                <form action="/delete_event/{{ event.id }}" method="POST">
-                                    <button type="submit">Delete</button>
-                                </form>
-                            </li>
-                        {% endfor %}
+                        <ul>
+                            {% for event in events %}
+                                <li>
+                                    <strong>{{ event.title }} ({{ event.date }})</strong>
+                                    <p>{{ event.description }}</p>
+                                    <div class="event-actions">
+                                        <a href="/edit_event/{{ event.id }}" class="btn">Edit</a>
+                                        <form action="/delete_event/{{ event.id }}" method="POST" style="display:inline;">
+                                            <button type="submit" class="btn">Delete</button>
+                                        </form>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
                     {% else %}
-                        <li>No events added yet.</li>
+                        <p>No events added yet.</p>
                     {% endif %}
-                </ul>
+                </div>
             </section>
         </main>
     </div>
 </body>
-                                   </html>
+    </html>
