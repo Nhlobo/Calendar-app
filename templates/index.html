@@ -3,17 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendar App</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Calendar</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-<body>
-    <header>
-        <h1>Welcome, {{ username }}</h1>
-        <a href="{{ url_for('add_event') }}">Add Event</a> | 
-        <a href="{{ url_for('view_events') }}">View Events</a>
-    </header>
-    <div id="calendar-container">
-        <!-- Your existing calendar UI code goes here -->
+<body class="dark-mode">
+    <div class="header">
+        <div class="auth-buttons">
+            <a href="/login" class="btn">Sign In</a>
+            <a href="/signup" class="btn">Sign Up</a>
+        </div>
     </div>
-</body>
-</html>
+
+    <div class="calendar-container">
+        <div class="calendar-header">
+            <button id="prev-month"><i class="fas fa-chevron-left"></i></button>
+            <h2 id="month-year"></h2>
+            <button id="next-month"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <div class="calendar-body">
+            <div class="calendar-weekdays">
+                <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+            </div>
+            <div id="calendar-days" class="calendar-days"></div>
+        </div>
+        <div class="controls">
+            <button id="toggle-mode"><i class="fas fa-adjust"></i> Toggle Dark/Light Mode</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; Nhlovo Mathebula. All rights reserved.</p>
+        <div class="footer-icons">
+            <a href="mailto:nhlobo365@gmail.com"><i class="fas fa-envelope"></i></a>
+            <a href="https://
