@@ -3,53 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendar</title>
+    <title>My Calendar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/styles.css">
     <script src="/static/js/calendar.js" defer></script>
 </head>
 <body>
-    <div class="container calendar-container">
-        <header>
-            <h1>Welcome, {{ session['username'] }}!</h1>
-            <button id="toggle-theme">Toggle Dark/Light Mode</button>
-            <a href="/logout" class="btn">Logout</a>
-        </header>
-        <main>
-            <div class="calendar">
-                <div id="calendar-header">
-                    <button id="prev-month">&lt;</button>
-                    <h2 id="month-year"></h2>
-                    <button id="next-month">&gt;</button>
-                </div>
-                <div id="calendar-days"></div>
-                <div id="calendar-events">
-                    <h3>Events</h3>
-                    <form id="event-form" action="/add_event" method="POST">
-                        <input type="text" name="title" id="event-title" placeholder="Event Title" required>
-                        <input type="date" name="date" id="event-date" required>
-                        <textarea name="description" id="event-description" placeholder="Description"></textarea>
-                        <button type="submit">Add Event</button>
-                    </form>
-                    <ul id="events-list">
-                        {% for event in events %}
-                            <li>
-                                <strong>{{ event.title }} ({{ event.date }})</strong>
-                                <p>{{ event.description }}</p>
-                                <form action="/edit_event/{{ event.id }}" method="POST">
-                                    <input type="text" name="title" value="{{ event.title }}" required>
-                                    <input type="date" name="date" value="{{ event.date }}" required>
-                                    <textarea name="description">{{ event.description }}</textarea>
-                                    <button type="submit">Edit</button>
-                                </form>
-                                <form action="/delete_event/{{ event.id }}" method="POST">
-                                    <button type="submit">Delete</button>
-                                </form>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
+    <div class="welcome-message">
+        <div class="animation-wrapper">
+            <h1 class="greeting">Welcome, <span>{{ session['username'] }}</span>!</h1>
+        </div>
+        <button id="toggle-theme">Toggle Dark/Light Mode</button>
+        <a href="/logout" class="btn-logout">Logout</a>
+    </div>
+    
+    <div class="container">
+        <div class="calendar-container">
+            <div id="calendar-header">
+                <button id="prev-month">&lt;</button>
+                <h2 id="month-year"></h2>
+                <button id="next-month">&gt;</button>
             </div>
-        </main>
+            <div id="calendar-days"></div>
+        </div>
+        
+        <div class="event-section">
+            <h3>Add Event</h3>
+            <form id="event-form" action="/add_event" method="POST">
+                <input type="text" name="title" id="event-title" placeholder="Event Title" required>
+                <input type="date" name="date" id="event-date" required>
+                <textarea name="description" id="event-description" placeholder="Event Description"></textarea>
+                <button type="submit">Add Event</button>
+            </form>
+            
+            <h3>Your Events</h3>
+            <ul id="events-list">
+                {% for event in events %}
+                <li>
+                    <strong>{{ event.title }} ({{ event.date }})</strong>
+                    <p>{{ event.description }}</p>
+                    <form action="/edit_event/{{ event.id }}" method="POST">
+                        <input type="text" name="title" value="{{ event.title }}" required>
+                        <input type="date" name="date" value="{{ event.date }}" required>
+                        <textarea name="description">{{ event.description }}</textarea>
+                        <button type="submit">Edit</button>
+                    </form>
+                    <form action="/delete_event/{{ event.id }}" method="POST">
+                        <button type="submit">Delete</button>
+                    </form>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 </body>
-                            </html>
+    </html>
